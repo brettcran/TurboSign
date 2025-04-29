@@ -1,0 +1,1 @@
+function openSignatureModal(){console.log('Signature modal opened')}
