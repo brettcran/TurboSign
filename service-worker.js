@@ -1,2 +1,7 @@
-self.addEventListener('install', e => {console.log('Service worker installed')});
-self.addEventListener('fetch', e => {e.respondWith(fetch(e.request).catch(()=>caches.match(e.request)))});
+self.addEventListener('install', function(e) {
+  console.log('Service Worker: Installed');
+});
+
+self.addEventListener('fetch', function(e) {
+  console.log('Service Worker: Fetching');
+});
