@@ -1,1 +1,0 @@
-function undo(){console.log('Undo')} function redo(){console.log('Redo')}
