@@ -190,9 +190,3 @@ canvas {
     width: 90%;
   }
 }
-
-/* Show modal when active */
-.modal.active { display: flex; }
-
-/* Position help button top-right */
-.help-btn { position: absolute; top: 20px; right: 20px; margin-top: 0; }

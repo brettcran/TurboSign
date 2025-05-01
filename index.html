@@ -1,80 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>TurboSign</title>
-  <link rel="stylesheet" href="styles.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PDF Crusher</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-  <div class="landing-container">
-    <h1>Welcome to TurboSign</h1>
+<div class="landing-container">
+  <h1>Welcome to PDF Crusher</h1>
+  <button class="upload-btn" id="upload-btn">Open PDF</button>
+<input type="file" id="file-input" accept="application/pdf" style="display:none;">
+  <input type="file" id="file-input" accept="application/pdf" style="display:none;">
 
-    <!-- Open PDF -->
-    <button id="upload-btn">Open PDF</button>
-    <input
-      type="file"
-      id="file-input"
-      accept="application/pdf"
-      style="opacity:0; position:absolute; left:-9999px; width:1px; height:1px;"
-    />
+  <h2>Recent Files</h2>
+  <div id="recent-files"></div>
 
-    <!-- Recent Files (placeholder) -->
-    <h2>Recent Files</h2>
-    <ul id="recent-files">
-      <!-- Dynamically populated -->
+  <button class="help-btn" id="help-btn">❓</button>
+</div>
+
+<!-- Help Modal -->
+<div id="help-modal" class="modal">
+  <div class="modal-content">
+    <span id="close-help" class="close">&times;</span>
+    <h2>Help</h2>
+    <ul class="help-list">
+      <li>📄 Open PDF: Upload your file</li>
+      <li>📝 Add Text: Insert a text box</li>
+      <li>✍️ Sign: Draw your signature</li>
+      <li>↩️ Undo: Undo last action</li>
+      <li>↪️ Redo: Redo last action</li>
+      <li>➕➖ Zoom In/Out: Adjust view</li>
+      <li>💾 Save: Save your edited PDF</li>
     </ul>
-
-    <!-- Help Modal Trigger -->
-    <button id="help-btn">❓</button>
-
-    <!-- Help Modal -->
-    <div id="help-modal" class="modal">
-      <div class="modal-content">
-        <span id="close-help" class="close">&times;</span>
-        <h2>Help</h2>
-        <ul>
-          <li>Open PDF: Upload your file</li>
-          <li>📝 Add Text: Insert a text box</li>
-          <li>✍️ Sign: Draw your signature</li>
-          <li>↩️ Undo: Undo last action</li>
-          <li>↪️ Redo: Redo last action</li>
-          <li>➕➖ Zoom In/Out: Adjust view</li>
-          <li>💾 Save: Save your edited PDF</li>
-        </ul>
-      </div>
-    </div>
   </div>
+</div>
 
-  <!-- Inline landing-page logic -->
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const uploadBtn = document.getElementById('upload-btn');
-      const fileInput = document.getElementById('file-input');
-      const helpBtn = document.getElementById('help-btn');
-      const helpModal = document.getElementById('help-modal');
-      const closeHelp = document.getElementById('close-help');
-
-      // Open file picker
-      uploadBtn.addEventListener('click', () => fileInput.click());
-      // Handle file selection
-      fileInput.addEventListener('change', e => {
-        const file = e.target.files[0];
-        if (!file || file.type !== 'application/pdf') return;
-        const reader = new FileReader();
-        reader.onload = ev => {
-          sessionStorage.setItem('pdfData', ev.target.result);
-          sessionStorage.setItem('pdfName', file.name);
-          window.location.href = 'editor.html';
-        };
-        reader.readAsDataURL(file);
-      });
-
-      // Help modal toggle
-      helpBtn.addEventListener('click', () => helpModal.classList.add('active'));
-      closeHelp.addEventListener('click', () => helpModal.classList.remove('active'));
-    });
-  </script>
+  <script src="scripts/storageHandler.js"></script>
+<script src="scripts/app.js"></script>
 </body>
-</html> 
+</html>
