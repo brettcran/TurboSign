@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>TurboSign</title>
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
 
@@ -20,10 +20,10 @@
       style="opacity:0; position:absolute; left:-9999px; width:1px; height:1px;"
     />
 
-    <!-- Recent Files -->
+    <!-- Recent Files (placeholder) -->
     <h2>Recent Files</h2>
-    <ul id="recent-list">
-      <!-- Populated by storageHandler.js -->
+    <ul id="recent-files">
+      <!-- Dynamically populated -->
     </ul>
 
     <!-- Help Modal Trigger -->
@@ -47,8 +47,34 @@
     </div>
   </div>
 
-  <!-- Load recents, then app logic -->
-  <script src="storageHandler.js"></script>
-  <script src="app.js"></script>
+  <!-- Inline landing-page logic -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const uploadBtn = document.getElementById('upload-btn');
+      const fileInput = document.getElementById('file-input');
+      const helpBtn = document.getElementById('help-btn');
+      const helpModal = document.getElementById('help-modal');
+      const closeHelp = document.getElementById('close-help');
+
+      // Open file picker
+      uploadBtn.addEventListener('click', () => fileInput.click());
+      // Handle file selection
+      fileInput.addEventListener('change', e => {
+        const file = e.target.files[0];
+        if (!file || file.type !== 'application/pdf') return;
+        const reader = new FileReader();
+        reader.onload = ev => {
+          sessionStorage.setItem('pdfData', ev.target.result);
+          sessionStorage.setItem('pdfName', file.name);
+          window.location.href = 'editor.html';
+        };
+        reader.readAsDataURL(file);
+      });
+
+      // Help modal toggle
+      helpBtn.addEventListener('click', () => helpModal.classList.add('active'));
+      closeHelp.addEventListener('click', () => helpModal.classList.remove('active'));
+    });
+  </script>
 </body>
-</html>
+</html> 
