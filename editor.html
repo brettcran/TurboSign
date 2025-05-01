@@ -10,13 +10,15 @@
 
 <!-- Toolbar -->
 <div id="toolbar">
+  <button id="upload-btn" class="toolbar-btn" data-action="upload" data-action="upload" data-action="upload">📂</button>
   <button class="toolbar-btn" data-action="text">📝</button>
   <button class="toolbar-btn" data-action="sign">✍️</button>
   <button class="toolbar-btn" data-action="save">💾</button>
   <button class="toolbar-btn" data-action="zoom-in">➕</button>
   <button class="toolbar-btn" data-action="zoom-out">➖</button>
-  <button class="toolbar-btn" id="help-btn" data-action="help">❓</button>
+  <button class="toolbar-btn" id="help-btn" data-action="help" data-action="help" data-action="help">❓</button>
 </div>
+<input type="file" id="file-input-embed" accept="application/pdf" style="display:none;">
 
 <!-- PDF Display -->
 <div id="pdf-container"></div>
@@ -38,7 +40,31 @@
 </div>
 
 <!-- Signature Modal -->
+
+
 <div id="signature-modal" class="modal">
+  <div class="modal-content">
+    <div id="saved-signatures" class="saved-signatures"></div>
+    <div id="signature-pad-wrapper">
+      <canvas id="signature-pad"></canvas>
+    </div>
+    <div class="modal-buttons">
+      <button id="save-signature">Save</button>
+      <button id="clear-signature">Clear</button>
+      <button id="close-signature">Close</button>
+    </div>
+  </div>
+</div>
+
+  <div id="signature-pad-wrapper" style="width:300px; height:150px; margin-bottom:8px;">
+    <canvas id="signature-pad"></canvas>
+  </div>
+  <button id="save-signature">Save</button>
+  <button id="clear-signature">Clear</button>
+  <button id="close-signature">Close</button>
+</div>
+
+    <div id="signature-pad-wrapper" style="width:300px; height:150px;">
   <div class="modal-content">
     <span id="close-signature" class="close">&times;</span>
     <h2>Draw Signature</h2>
@@ -52,11 +78,72 @@
 
 <!-- Scripts -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="scripts/pdfHandler.js"></script>
-<script src="scripts/uiHandler.js"></script>
-<script src="scripts/signatureHandler.js"></script>
-<script src="scripts/app.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>\n  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
+<!-- Floating Text Toolbar -->
+  <div id="text-toolbar" class="toolbar hidden">
+    <label>
+      Font:
+      <select id="font-family-selector">
+        <option value="Arial">Arial</option>
+        <option value="Times New Roman">Times New Roman</option>
+        <option value="Georgia">Georgia</option>
+        <option value="Helvetica">Helvetica</option>
+      </select>
+    </label>
+    <label>
+      Size:
+      <select id="font-size-selector">
+        <option value="12">12px</option>
+        <option value="14">14px</option>
+        <option value="16" selected>16px</option>
+        <option value="18">18px</option>
+        <option value="24">24px</option>
+      </select>
+    </label>
+    <label>
+      Weight:
+      <select id="font-weight-selector">
+        <option value="normal">Normal</option>
+        <option value="bold">Bold</option>
+      </select>
+    </label>
+    <button id="rotate-left-btn">⟲</button>
+    <button id="rotate-right-btn">⟳</button>
+  </div>
+
+  <div id="text-sidebar" class="hidden">
+    <h4>Text Options</h4>
+    <label>Font:
+      <select id="sidebar-font-selector">
+        <option value="Arial">Arial</option>
+        <option value="Times New Roman">Times New Roman</option>
+        <option value="Georgia">Georgia</option>
+        <option value="Helvetica">Helvetica</option>
+      </select>
+    </label>
+    <label>Size:
+      <input type="number" id="sidebar-font-size" value="16" min="8" max="72"/>
+    </label>
+    <label>Weight:
+      <select id="sidebar-font-weight">
+        <option value="normal">Normal</option>
+        <option value="bold">Bold</option>
+      </select>
+    </label>
+    <button id="sidebar-rotate-left">⟲</button>
+    <button id="sidebar-rotate-right">⟳</button>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
+  <script src="scripts/storageHandler.js"></script>
+  <script src="scripts/pdfHandler.js"></script>
+  <script src="scripts/uiHandler.js"></script>
+  <script src="scripts/signatureHandler.js"></script>
+  <script src="scripts/app.js"></script>
 
 </body>
 </html>

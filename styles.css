@@ -98,9 +98,12 @@ canvas {
   padding: 6px 10px;
   font-size: 16px;
   color: #111827;
-  cursor: move;
+  cursor: text;
   overflow: hidden;
   z-index: 10;
+
+  resize: both;
+  overflow: auto;
 }
 
 .text-box[contenteditable="true"]:focus {
@@ -109,9 +112,12 @@ canvas {
 }
 
 /* === Signature Image === */
-.signature-image {
-  position: absolute;
-  cursor: move;
+.signature-image { position: absolute; cursor: move; background: transparent; 
+  resize: both;
+  overflow: auto;
+
+  resize: both;
+  overflow: auto;
 }
 
 /* === Modals === */
@@ -169,9 +175,7 @@ canvas {
 }
 
 /* === Signature Modal === */
-#signature-pad {
-  border-radius: 8px;
-}
+#signature-pad { background: transparent; }
 
 .signature-buttons {
   margin-top: 10px;
@@ -189,4 +193,166 @@ canvas {
   .modal-content {
     width: 90%;
   }
+}
+
+
+/* Floating Text Toolbar */
+#text-toolbar {
+  position: absolute;
+  background: #fff;
+  border: 1px solid #ccc;
+  padding: 6px;
+  border-radius: 4px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  z-index: 1000;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+#text-toolbar.hidden {
+  display: none;
+}
+#text-toolbar label {
+  display: flex;
+  flex-direction: column;
+  font-size: 12px;
+}
+#text-toolbar select {
+  margin-top: 2px;
+}
+#text-toolbar button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+/* Slide-out Text Sidebar */
+#text-sidebar {
+  position: absolute;
+  top: 20px;
+  right: -220px;
+  width: 200px;
+  background: #fff;
+  border-left: 1px solid #ccc;
+  padding: 10px;
+  box-shadow: -2px 0 6px rgba(0,0,0,0.2);
+  transition: right 0.3s;
+  z-index: 1000;
+  max-height: 80vh;
+  overflow: auto;
+}
+#text-sidebar.visible {
+  right: 0;
+}
+#text-sidebar.hidden {
+  display: block;
+}
+#text-sidebar h4 {
+  margin-top: 0;
+  font-size: 14px;
+}
+#text-sidebar label {
+  display: block;
+  margin-bottom: 8px;
+}
+#text-sidebar input,
+#text-sidebar select {
+  width: 100%;
+  margin-top: 4px;
+}
+
+
+
+/* Prevent resizing */
+#signature-pad-wrapper {
+  width: 300px !important;
+  height: 150px !important;
+  margin: 8px 0 !important;
+  resize: none !important;
+  overflow: hidden !important;
+}
+/* Modal content background */
+#signature-modal > div, #signature-modal > button {
+  background: #fff !important;
+  margin: 4px !important;
+  padding: 6px !important;
+  border-radius: 4px !important;
+}
+#signature-modal button {
+  cursor: pointer !important;
+}
+
+
+/* Signature Modal Overlay */
+#signature-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.5);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}
+#signature-modal.active {
+  display: flex;
+}
+.modal-content {
+  background: #fff;
+  padding: 16px;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+/* Saved signatures thumbnails */
+.saved-signatures {
+  display: flex;
+  gap: 8px;
+  max-width: 100%;
+  overflow-x: auto;
+}
+/* Signature pad container */
+#signature-pad-wrapper {
+  width: 400px;
+  height: 200px;
+  background: #f9f9f9;
+}
+/* Canvas fills wrapper */
+#signature-pad {
+  width: 100%;
+  height: 100%;
+}
+/* Modal buttons row */
+.modal-buttons {
+  display: flex;
+  gap: 8px;
+}
+.modal-buttons button {
+  padding: 8px 12px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+
+/* Center help modal */
+#help-modal, .modal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#help-modal.active { display: flex; }
+
+
+/* Help Modal Hidden by Default */
+#help-modal {
+  display: none !important;
+}
+#help-modal.active {
+  display: flex !important;
 }
