@@ -190,21 +190,3 @@ canvas {
     width: 90%;
   }
 }
-
-#help-modal, #signature-modal {
-  display: none;
-  position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-  align-items: center; justify-content: center; background: rgba(0,0,0,0.5);
-  z-index: 1000;
-}
-#help-modal.active, #signature-modal.active {
-  display: flex;
-}
-#signature-pad-wrapper {
-  width: 400px; height: 200px; background: #fff; padding: 10px; border-radius: 8px;
-}
-.signature-image, .text-box {
-  resize: both; overflow: auto;
-}
-#text-sidebar { display: none; }
-#text-sidebar.visible { display: block; }
