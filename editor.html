@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PDF Crusher - Editor</title>
+  <title>TurboSign - Editor</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -17,6 +17,7 @@
   <button class="toolbar-btn" data-action="zoom-out">➖</button>
   <button class="toolbar-btn" id="help-btn" data-action="help">❓</button>
 </div>
+<div id="text-sidebar" class="sidebar"></div>
 
 <!-- PDF Display -->
 <div id="pdf-container"></div>
@@ -51,8 +52,9 @@
 </div>
 
 <!-- Scripts -->
-<script src="scripts/https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
-<script src="scripts/https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
 <script src="scripts/pdfHandler.js"></script>
 <script src="scripts/uiHandler.js"></script>
 <script src="scripts/signatureHandler.js"></script>

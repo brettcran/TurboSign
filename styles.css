@@ -190,3 +190,6 @@ canvas {
     width: 90%;
   }
 }
+
+/* Show modal when active */
+.modal.active { display: flex; }
