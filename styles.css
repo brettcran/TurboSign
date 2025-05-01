@@ -124,6 +124,10 @@ canvas {
   align-items: center;
   z-index: 9999;
 }
+/* Show modal when active */
+.modal.active {
+  display: flex;
+}
 
 .modal-content {
   position: relative;
