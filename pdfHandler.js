@@ -91,3 +91,72 @@ function zoomOut() {
     renderAllPages();
   }
 }
+
+
+async function exportWithBackend() {
+  const annotations = [];
+
+  document.querySelectorAll('.text-box').forEach(tb => {
+    annotations.push({
+      type: "text",
+      content: tb.innerText,
+      x: parseFloat(tb.style.left),
+      y: parseFloat(tb.style.top),
+      page: 1,
+      font: "helv",
+      size: 12
+    });
+  });
+
+  document.querySelectorAll('.symbol-box').forEach(el => {
+    annotations.push({
+      type: el.innerText === '✔' ? 'check' : 'xmark',
+      x: parseFloat(el.style.left),
+      y: parseFloat(el.style.top),
+      page: 1
+    });
+  });
+
+  document.querySelectorAll('.circle-box').forEach(el => {
+    annotations.push({
+      type: 'circle',
+      x: parseFloat(el.style.left),
+      y: parseFloat(el.style.top),
+      page: 1,
+      radius: 20
+    });
+  });
+
+  document.querySelectorAll('.signature-image').forEach(img => {
+    annotations.push({
+      type: "signature",
+      image: img.src,
+      x: parseFloat(img.style.left),
+      y: parseFloat(img.style.top),
+      width: img.width,
+      height: img.height,
+      page: 1
+    });
+  });
+
+  const pdfBase64 = sessionStorage.getItem('pdfData');
+  const response = await fetch(pdfBase64);
+  const blob = await response.blob();
+  const form = new FormData();
+  form.append("pdf", blob, "input.pdf");
+  form.append("annotations", JSON.stringify(annotations));
+
+  const res = await fetch("https://pdf-om45.onrender.com/process", {
+    method: "POST",
+    body: form
+  });
+
+  const resultBlob = await res.blob();
+  const url = URL.createObjectURL(resultBlob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "annotated.pdf";
+  a.click();
+}
+
+window.savePDF = exportWithBackend;
