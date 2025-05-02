@@ -5,22 +5,13 @@ document.addEventListener('DOMContentLoaded', () => {
   window.scale = 1;
   window.lastClick = { x: 0, y: 0 };
 
-  // Track last click for placing elements
-  pdfContainer.addEventListener('mousedown', e => {
-    const rect = pdfContainer.getBoundingClientRect();
-    window.lastClick = {
-      x: (e.clientX - rect.left) / window.scale,
-      y: (e.clientY - rect.top) / window.scale
-    };
-  });
-
-  // Bind toolbar buttons
+  // Always bind toolbar actions
   document.querySelectorAll('#toolbar [data-action]').forEach(btn => {
     btn.addEventListener('click', () => {
       const action = btn.dataset.action;
       switch (action) {
         case 'upload':
-          document.getElementById('file-input-embed').click();
+          document.getElementById('file-input-embed')?.click();
           break;
         case 'text':
           createTextBoxAt(window.lastClick.x, window.lastClick.y);
@@ -39,12 +30,12 @@ document.addEventListener('DOMContentLoaded', () => {
           break;
         case 'zoom-in':
           window.scale += 0.2;
-          pdfContainer.style.transform = `scale(${window.scale})`;
+          if (pdfContainer) pdfContainer.style.transform = `scale(${window.scale})`;
           break;
         case 'zoom-out':
           if (window.scale > 0.4) {
             window.scale -= 0.2;
-            pdfContainer.style.transform = `scale(${window.scale})`;
+            if (pdfContainer) pdfContainer.style.transform = `scale(${window.scale})`;
           }
           break;
         case 'export':
@@ -54,13 +45,24 @@ document.addEventListener('DOMContentLoaded', () => {
           toggleDeleteMode();
           break;
         case 'help':
-          document.getElementById('help-modal').classList.add('active');
+          document.getElementById('help-modal')?.classList.add('active');
           break;
       }
     });
   });
 
-  // Help & signature modal close
+  // Track clicks for placement
+  if (pdfContainer) {
+    pdfContainer.addEventListener('mousedown', e => {
+      const rect = pdfContainer.getBoundingClientRect();
+      window.lastClick = {
+        x: (e.clientX - rect.left) / window.scale,
+        y: (e.clientY - rect.top) / window.scale
+      };
+    });
+  }
+
+  // Modals
   document.getElementById('close-help')?.addEventListener('click', () => {
     document.getElementById('help-modal')?.classList.remove('active');
   });
@@ -69,7 +71,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('signature-modal')?.classList.remove('active');
   });
 
-  // File input handler
+  // PDF Upload
   document.getElementById('file-input-embed')?.addEventListener('change', e => {
     const file = e.target.files[0];
     if (!file || file.type !== 'application/pdf') return;
@@ -77,12 +79,11 @@ document.addEventListener('DOMContentLoaded', () => {
     reader.onload = function(ev) {
       sessionStorage.setItem('pdfData', ev.target.result);
       sessionStorage.setItem('pdfName', file.name);
-      location.reload(); // Re-init the page
+      location.reload();
     };
     reader.readAsDataURL(file);
   });
 
-  // Auto-load PDF if session exists
   if (sessionStorage.getItem('pdfData')) {
     loadPDF();
   }
