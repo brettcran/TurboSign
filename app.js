@@ -74,6 +74,12 @@ document.addEventListener('DOMContentLoaded', () => {
         case 'upload':
           document.getElementById('file-input-embed').click();
           break;
+        case 'text':
+          createTextBoxAt(window.lastClick.x, window.lastClick.y);
+          break;
+        case 'sign':
+          openSignatureModal();
+          break;
         case 'add-text':
           createTextBoxAt(window.lastClick.x, window.lastClick.y);
           break;

@@ -124,10 +124,6 @@ canvas {
   align-items: center;
   z-index: 9999;
 }
-/* Show modal when active */
-.modal.active {
-  display: flex;
-}
 
 .modal-content {
   position: relative;
@@ -192,5 +188,36 @@ canvas {
 
   .modal-content {
     width: 90%;
+  }
+}
+
+
+/* === Mobile Toolbar Optimization === */
+@media (max-width: 768px) {
+  #toolbar {
+    position: fixed;
+    bottom: 10px;
+    top: auto;
+    left: 50%;
+    transform: translateX(-50%);
+    flex-direction: row;
+    padding: 10px 12px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 9999px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    gap: 8px;
+    z-index: 10000;
+  }
+
+  .toolbar-btn {
+    padding: 10px 12px;
+    font-size: 20px;
+    border-radius: 50%;
+    min-width: 48px;
+    height: 48px;
+  }
+
+  #pdf-container {
+    padding-bottom: 80px; /* to ensure toolbar doesn't overlap content */
   }
 }
