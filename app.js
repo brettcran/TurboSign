@@ -1,96 +1,11 @@
 // scripts/app.js
 
-// Handle PDF file upload (index and editor pages)
-function handleFileUpload(e) {
-  const file = e.target.files[0];
-  if (!file || file.type !== 'application/pdf') return;
-  const reader = new FileReader();
-  reader.onload = function(ev) {
-    sessionStorage.setItem('pdfData', ev.target.result);
-    sessionStorage.setItem('pdfName', file.name);
-    // If on editor page, reload PDF, else navigate
-    if (document.getElementById('pdf-container')) {
-      loadPDF();
-    } else {
-      window.location.href = 'editor.html';
-    }
-  };
-  reader.readAsDataURL(file);
-}
-
 document.addEventListener('DOMContentLoaded', () => {
-  // Index page upload & help
-  const uploadBtn = document.getElementById('upload-btn');
-  const fileInput = document.getElementById('file-input');
-  if (uploadBtn && fileInput) {
-    uploadBtn.addEventListener('click', () => fileInput.click());
-    fileInput.addEventListener('change', handleFileUpload);
-  }
-  const helpBtn = document.getElementById('help-btn');
-  if (helpBtn && helpModal) {
-    helpBtn.addEventListener('click', () => helpModal.classList.add('active'));
-  }
-  if (closeHelp && helpModal) {
-    closeHelp.addEventListener('click', () => helpModal.classList.remove('active'));
-  }
-
-  // Bind upload button (index)
-  const uploadBtn = document.getElementById('upload-btn');
-  const fileInput = document.getElementById('file-input');
-  if (uploadBtn && fileInput) {
-    uploadBtn.addEventListener('click', () => fileInput.click());
-    fileInput.addEventListener('change', handleFileUpload);
-  }
-  // Embedded upload (editor)
-  const embedInput = document.getElementById('file-input-embed');
-  if (embedInput) {
-    embedInput.addEventListener('change', handleFileUpload);
-  }
-  // Help modal toggling
-  if (helpBtn && helpModal) helpBtn.addEventListener('click', () => helpModal.classList.add('active'));
-  if (closeHelp && helpModal) closeHelp.addEventListener('click', () => helpModal.classList.remove('active'));
-  // Editor page logic
   const pdfContainer = document.getElementById('pdf-container');
-  document.querySelectorAll('[data-action]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const action = btn.dataset.action;
-      switch (action) {
-        case 'upload':
-          document.getElementById('file-input-embed')?.click();
-          break;
-        case 'add-text':
-        case 'text':
-          createTextBoxAt(window.lastClick.x, window.lastClick.y);
-          break;
-        case 'add-signature':
-        case 'sign':
-          openSignatureModal();
-          break;
-        case 'save':
-          savePDF();
-          break;
-        case 'zoom-in':
-          window.scale += 0.2;
-          pdfContainer.style.transform = `scale(${window.scale})`;
-          break;
-        case 'zoom-out':
-          if (window.scale > 1) {
-            window.scale -= 0.2;
-            pdfContainer.style.transform = `scale(${window.scale})`;
-          }
-          break;
-        case 'help':
-          document.getElementById('help-modal')?.classList.add('active');
-          break;
-        default:
-          console.warn('Unknown action:', action);
-      }
-    });
-  });
-  if (!pdfContainer) return;
-  if (sessionStorage.getItem('pdfData')) loadPDF();
   window.scale = 1;
   window.lastClick = { x: 0, y: 0 };
+
+  // Track last click for placing elements
   pdfContainer.addEventListener('mousedown', e => {
     const rect = pdfContainer.getBoundingClientRect();
     window.lastClick = {
@@ -98,7 +13,9 @@ document.addEventListener('DOMContentLoaded', () => {
       y: (e.clientY - rect.top) / window.scale
     };
   });
-  document.querySelectorAll('[data-action]').forEach(btn => {
+
+  // Bind toolbar buttons
+  document.querySelectorAll('#toolbar [data-action]').forEach(btn => {
     btn.addEventListener('click', () => {
       const action = btn.dataset.action;
       switch (action) {
@@ -111,31 +28,62 @@ document.addEventListener('DOMContentLoaded', () => {
         case 'sign':
           openSignatureModal();
           break;
-        case 'add-text':
-          createTextBoxAt(window.lastClick.x, window.lastClick.y);
+        case 'check':
+          insertSymbol('✔');
           break;
-        case 'add-signature':
-          openSignatureModal();
+        case 'xmark':
+          insertSymbol('✘');
           break;
-        case 'save':
-          savePDF();
+        case 'circle':
+          insertCircle();
           break;
         case 'zoom-in':
           window.scale += 0.2;
           pdfContainer.style.transform = `scale(${window.scale})`;
           break;
         case 'zoom-out':
-          if (window.scale > 1) {
+          if (window.scale > 0.4) {
             window.scale -= 0.2;
             pdfContainer.style.transform = `scale(${window.scale})`;
           }
           break;
-        case 'help':
-          helpModal.classList.add('active');
+        case 'export':
+          savePDF();
           break;
-        default:
-          console.warn('Unknown action:', action);
+        case 'delete':
+          toggleDeleteMode();
+          break;
+        case 'help':
+          document.getElementById('help-modal').classList.add('active');
+          break;
       }
     });
   });
+
+  // Help & signature modal close
+  document.getElementById('close-help')?.addEventListener('click', () => {
+    document.getElementById('help-modal')?.classList.remove('active');
+  });
+
+  document.getElementById('close-signature')?.addEventListener('click', () => {
+    document.getElementById('signature-modal')?.classList.remove('active');
+  });
+
+  // File input handler
+  document.getElementById('file-input-embed')?.addEventListener('change', e => {
+    const file = e.target.files[0];
+    if (!file || file.type !== 'application/pdf') return;
+    const reader = new FileReader();
+    reader.onload = function(ev) {
+      sessionStorage.setItem('pdfData', ev.target.result);
+      sessionStorage.setItem('pdfName', file.name);
+      location.reload(); // Re-init the page
+    };
+    reader.readAsDataURL(file);
+  });
+
+  // Auto-load PDF if session exists
+  if (sessionStorage.getItem('pdfData')) {
+    loadPDF();
+  }
 });
