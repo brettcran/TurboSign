@@ -27,8 +27,6 @@ document.addEventListener('DOMContentLoaded', () => {
     fileInput.addEventListener('change', handleFileUpload);
   }
   const helpBtn = document.getElementById('help-btn');
-  const helpModal = document.getElementById('help-modal');
-  const closeHelp = document.getElementById('close-help');
   if (helpBtn && helpModal) {
     helpBtn.addEventListener('click', () => helpModal.classList.add('active'));
   }
@@ -49,13 +47,46 @@ document.addEventListener('DOMContentLoaded', () => {
     embedInput.addEventListener('change', handleFileUpload);
   }
   // Help modal toggling
-  const helpBtn = document.getElementById('help-btn');
-  const helpModal = document.getElementById('help-modal');
-  const closeHelp = document.getElementById('close-help');
   if (helpBtn && helpModal) helpBtn.addEventListener('click', () => helpModal.classList.add('active'));
   if (closeHelp && helpModal) closeHelp.addEventListener('click', () => helpModal.classList.remove('active'));
   // Editor page logic
   const pdfContainer = document.getElementById('pdf-container');
+  document.querySelectorAll('[data-action]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const action = btn.dataset.action;
+      switch (action) {
+        case 'upload':
+          document.getElementById('file-input-embed')?.click();
+          break;
+        case 'add-text':
+        case 'text':
+          createTextBoxAt(window.lastClick.x, window.lastClick.y);
+          break;
+        case 'add-signature':
+        case 'sign':
+          openSignatureModal();
+          break;
+        case 'save':
+          savePDF();
+          break;
+        case 'zoom-in':
+          window.scale += 0.2;
+          pdfContainer.style.transform = `scale(${window.scale})`;
+          break;
+        case 'zoom-out':
+          if (window.scale > 1) {
+            window.scale -= 0.2;
+            pdfContainer.style.transform = `scale(${window.scale})`;
+          }
+          break;
+        case 'help':
+          document.getElementById('help-modal')?.classList.add('active');
+          break;
+        default:
+          console.warn('Unknown action:', action);
+      }
+    });
+  });
   if (!pdfContainer) return;
   if (sessionStorage.getItem('pdfData')) loadPDF();
   window.scale = 1;
