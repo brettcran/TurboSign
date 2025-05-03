@@ -1,5 +1,6 @@
 // scripts/uiHandler.js
 
+// Make an element draggable within its container
 function makeDraggable(el) {
   let dragging = false, startX, startY, origX, origY;
   el.style.cursor = 'move';
@@ -24,7 +25,14 @@ function makeDraggable(el) {
   }
 }
 
-// Create a draggable text box
+// Slide-out sidebar binding for text boxes
+const textSidebar = document.getElementById('text-sidebar');
+function bindTextBoxSidebar(tb) {
+  tb.addEventListener('focus', () => textSidebar.classList.add('visible'));
+  tb.addEventListener('blur', () => textSidebar.classList.remove('visible'));
+}
+
+// Create and insert a text box at given coordinates
 function createTextBoxAt(x, y) {
   const tb = document.createElement('div');
   tb.className = 'text-box';
@@ -32,57 +40,13 @@ function createTextBoxAt(x, y) {
   tb.style.position = 'absolute';
   tb.style.left = x + 'px';
   tb.style.top = y + 'px';
+  tb.style.minWidth = '100px';
+  tb.style.minHeight = '30px';
+  tb.style.padding = '4px 8px';
+  tb.style.border = '1px dashed #6366f1';
+  tb.style.background = 'transparent';
   document.getElementById('pdf-container').appendChild(tb);
+  bindTextBoxSidebar(tb);
   makeDraggable(tb);
   tb.focus();
 }
-
-// Insert checkmark or X symbol
-function insertSymbol(char) {
-  const el = document.createElement('div');
-  el.className = 'symbol-box';
-  el.innerText = char;
-  el.style.left = window.lastClick.x + 'px';
-  el.style.top = window.lastClick.y + 'px';
-  document.getElementById('pdf-container').appendChild(el);
-  makeDraggable(el);
-}
-
-// Insert resizable circle
-function insertCircle() {
-  const el = document.createElement('div');
-  el.className = 'circle-box';
-  el.style.left = window.lastClick.x + 'px';
-  el.style.top = window.lastClick.y + 'px';
-  document.getElementById('pdf-container').appendChild(el);
-  makeDraggable(el);
-}
-
-let deleteMode = false;
-function toggleDeleteMode() {
-  deleteMode = !deleteMode;
-  const container = document.getElementById('pdf-container');
-  if (deleteMode) {
-    container.classList.add('delete-mode');
-    container.querySelectorAll('.text-box, .signature-image, .symbol-box, .circle-box').forEach(el => {
-      el.addEventListener('click', deleteHandler);
-    });
-  } else {
-    container.classList.remove('delete-mode');
-    container.querySelectorAll('.text-box, .signature-image, .symbol-box, .circle-box').forEach(el => {
-      el.removeEventListener('click', deleteHandler);
-    });
-  }
-}
-
-function deleteHandler(e) {
-  if (deleteMode) {
-    e.stopPropagation();
-    e.target.remove();
-  }
-}
-
-window.createTextBoxAt = createTextBoxAt;
-window.insertSymbol = insertSymbol;
-window.insertCircle = insertCircle;
-window.toggleDeleteMode = toggleDeleteMode;

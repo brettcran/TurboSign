@@ -5,10 +5,15 @@ document.addEventListener('DOMContentLoaded', () => {
   window.scale = 1;
   window.lastClick = { x: 0, y: 0 };
 
+  console.log("PDFill-Sign: DOM Ready");
+
   // Always bind toolbar actions
-  document.querySelectorAll('#toolbar [data-action]').forEach(btn => {
+  const toolbarButtons = document.querySelectorAll('[data-action]');
+  console.log("Binding toolbar actions:", toolbarButtons.length);
+  toolbarButtons.forEach(btn => {
     btn.addEventListener('click', () => {
       const action = btn.dataset.action;
+      console.log("Toolbar action triggered:", action);
       switch (action) {
         case 'upload':
           document.getElementById('file-input-embed')?.click();
@@ -47,11 +52,12 @@ document.addEventListener('DOMContentLoaded', () => {
         case 'help':
           document.getElementById('help-modal')?.classList.add('active');
           break;
+        default:
+          console.warn("Unknown action:", action);
       }
     });
   });
 
-  // Track clicks for placement
   if (pdfContainer) {
     pdfContainer.addEventListener('mousedown', e => {
       const rect = pdfContainer.getBoundingClientRect();
@@ -62,7 +68,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Modals
   document.getElementById('close-help')?.addEventListener('click', () => {
     document.getElementById('help-modal')?.classList.remove('active');
   });
@@ -71,7 +76,6 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('signature-modal')?.classList.remove('active');
   });
 
-  // PDF Upload
   document.getElementById('file-input-embed')?.addEventListener('change', e => {
     const file = e.target.files[0];
     if (!file || file.type !== 'application/pdf') return;

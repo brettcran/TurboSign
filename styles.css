@@ -190,35 +190,3 @@ canvas {
     width: 90%;
   }
 }
-
-
-/* === Mobile Toolbar Fix === */
-@media (max-width: 768px) {
-  #toolbar {
-    position: fixed;
-    bottom: 10px;
-    top: auto;
-    left: 50%;
-    transform: translateX(-50%);
-    flex-direction: row;
-    padding: 10px 12px;
-    background: rgba(255, 255, 255, 0.9);
-    border-radius: 9999px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-    gap: 8px;
-    z-index: 9999;
-  }
-
-  .toolbar-btn,
-  #toolbar button {
-    padding: 8px;
-    font-size: 18px;
-    width: 42px;
-    height: 42px;
-    border-radius: 50%;
-  }
-
-  #pdf-container {
-    padding-bottom: 100px;
-  }
-}
