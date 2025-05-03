@@ -7,7 +7,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   console.log("PDFill-Sign: DOM Ready");
 
-  // Always bind toolbar actions
   const toolbarButtons = document.querySelectorAll('[data-action]');
   console.log("Binding toolbar actions:", toolbarButtons.length);
   toolbarButtons.forEach(btn => {
@@ -92,3 +91,36 @@ document.addEventListener('DOMContentLoaded', () => {
     loadPDF();
   }
 });
+
+// On-screen debug log overlay
+(function createDebugOverlay() {
+  const overlay = document.createElement("div");
+  overlay.id = "debug-log";
+  overlay.style.position = "fixed";
+  overlay.style.bottom = "0";
+  overlay.style.left = "0";
+  overlay.style.right = "0";
+  overlay.style.maxHeight = "30vh";
+  overlay.style.overflowY = "auto";
+  overlay.style.background = "rgba(0,0,0,0.8)";
+  overlay.style.color = "lime";
+  overlay.style.fontSize = "12px";
+  overlay.style.fontFamily = "monospace";
+  overlay.style.padding = "5px";
+  overlay.style.zIndex = "99999";
+  document.body.appendChild(overlay);
+
+  const log = console.log;
+  console.log = function (...args) {
+    log.apply(console, args);
+    overlay.innerHTML += args.map(a => typeof a === 'object' ? JSON.stringify(a) : a).join(' ') + "<br>";
+    overlay.scrollTop = overlay.scrollHeight;
+  };
+
+  const warn = console.warn;
+  console.warn = function (...args) {
+    warn.apply(console, args);
+    overlay.innerHTML += "<span style='color:yellow'>" + args.join(" ") + "</span><br>";
+    overlay.scrollTop = overlay.scrollHeight;
+  };
+})();
